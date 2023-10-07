@@ -1,0 +1,32 @@
+type: object
+required:
+  - phoneNumber
+  - emailId
+  - firstName
+  - lastName
+  - dateOfBirth
+  - timestamp
+properties:
+  firstName:
+    type: string
+    description: The available balance of the account.
+    nullable: false
+  lastName:
+    type: string
+    description: The available balance of the account.
+    nullable: false
+  dateOfBirth:
+    type: string
+    description: account holder date of birth
+    format: date
+    nullable: false
+  emailId:
+    type: string
+    pattern: ^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$
+    description: account holder email id
+    nullable: true
+  phoneNumber:
+    type: integer
+    description: account holder contanct number
+    nullable: false
+additionalProperties: false

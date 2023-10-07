@@ -1,0 +1,180 @@
+openapi: 3.0.0
+info:
+  title: movie  API
+  version: v1
+  contact:
+    email: amitkrishna.sharma.gwl@gmail.com
+    name: Amit Sharma
+paths:
+
+  /catalog-svc/v1/movies/{id}:
+    get:
+      tags:
+        - movie  details
+      summary: >-  
+        get movie details based on provided city id
+      operationId: 'get movie details'
+      
+      parameters:
+        - name: Id
+          in: path
+          required: true
+          schema:
+            type: integer
+            maxLength: 8
+            minLength: 2
+
+      responses:
+        '200':
+          $ref: '#/components/responses/movie'
+        '400':
+           $ref: '#/components/responses/BadRequest'
+        '401':
+           $ref: '#/components/responses/Unautherize'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+           $ref: '#/components/responses/ServerError'
+
+    delete:
+      tags:
+        -  delete movie
+      summary: >-
+        delete movie based on provided movie id
+      operationId: 'delete movie '
+
+      parameters:
+        - name: Id
+          in: path
+          required: true
+          schema:
+            type: integer
+            maxLength: 8
+            minLength: 2
+
+      responses:
+        '200':
+          $ref: '#/components/responses/movie'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unautherize'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /user-svc/v1/movies/:
+# Add new Audi data
+    post:
+      tags:
+        - add new movie
+      summary: >-  
+        add new movie
+      operationId: 'add new movie"'
+      requestBody:
+        description: The request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/movieUpsertRequest'
+      responses:
+        '201':
+            $ref: '#/components/responses/201Response'
+        '400':
+           $ref: '#/components/responses/BadRequest'
+        '401':
+           $ref: '#/components/responses/Unautherize'
+        '404':
+          $ref: '#/components/responses/RecordNotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+           $ref: '#/components/responses/ServerError'
+
+    # Add new Audi data
+    put:
+      tags:
+        - modify movie details
+      summary: >-
+        create new movie entry
+      operationId: 'modify new MOVIE"'
+      requestBody:
+        description: The request body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/movieUpsertRequest'
+      responses:
+        '201':
+          $ref: '#/components/responses/201Response'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unautherize'
+        '404':
+          $ref: '#/components/responses/RecordNotFound'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    movieUpsertRequest:
+      $ref: "../schemas/requests/movieUpsertRequest.yaml"
+    ProblemDetails:
+      $ref: "../schemas/error/ProblemDetails.yaml"
+    ValidationProblemDetails:
+       $ref: "../schemas/error/ValidationProblemDetails.yaml"
+
+  responses:
+  # HTTP Server Responses
+    movie:
+      $ref: "../schemas/response/movie.yaml"
+    globalExceptionHandler:
+      $ref: "../httpresponse/201.yaml"
+
+    201Response:
+       $ref: "../httpresponse/201.yaml"
+    Unautherize:
+       $ref: "../httpresponse/401.yaml"
+    ServerError:
+       $ref: "../httpresponse/500.yaml"
+    RecordNotFound:
+      $ref: "../httpresponse/404.yaml"
+    BadRequest:
+      $ref: "../httpresponse/400.yaml"
+    MethodNotAllowed:
+      $ref: "../httpresponse/405.yaml"
+
+# Security Schema for authentication or autherization  
+  securitySchemes:
+      bearerAuth: # arbitrary name for the security scheme
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+      oAuth2AllGrant:
+        type: oauth2
+        description: For more information, see https://xxx.com/docs/oauth2/requests
+        flows: 
+          implicit:
+            authorizationUrl: https://xxxx.com/oauth2/authorize
+            scopes:
+              read: Grant read-only access to all your data except for the account and user info
+              write: Grant write-only access to all your data except for the account and user info
+              profile: Grant read-only access to the account and user info only
+      oAuth2Read:
+        type: oauth2
+        description: For more information, see https://xxx.com/docs/oauth2/requests
+        flows: 
+          implicit:
+            authorizationUrl: https://xxxx.com/oauth2/authorize
+            scopes:
+              read: Grant read-only access to all your data except for the account and user info
+
+security:
+  - bearerAuth: []
+  - oAuth2AllGrant: []
+  - oAuth2Read: []
+      
